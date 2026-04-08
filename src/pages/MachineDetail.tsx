@@ -1,10 +1,11 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Video, Package, RotateCcw, Truck, Check, ArrowRight } from "lucide-react";
+import { Shield, Video, Package, RotateCcw, Truck, Check, ArrowRight, Eye, Flame } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import ProductReviews from "@/components/ProductReviews";
+import ViewerCount from "@/components/ViewerCount";
 import { getProductBySlug, products, formatPrice } from "@/data/products";
 import { getReviewsForProduct, getAllReviews } from "@/data/reviews";
 import { useState } from "react";
@@ -100,10 +101,20 @@ export default function MachineDetail() {
                 </div>
               </div>
 
-              {product.stockCount <= 5 ? (
-                <p className="text-sm text-destructive font-semibold">🔥 Almost Gone — Only {product.stockCount} left</p>
+              {product.stockCount <= 5 && product.stockCount > 0 ? (
+                <div className="flex items-center gap-3">
+                  <p className="text-sm text-destructive font-semibold flex items-center gap-1.5">
+                    <Flame className="w-4 h-4" /> Almost Gone — Only {product.stockCount} left
+                  </p>
+                  <ViewerCount slug={product.slug} />
+                </div>
+              ) : product.stockCount > 0 ? (
+                <div className="flex items-center gap-3">
+                  <p className="text-sm text-success font-semibold">✓ In Stock — {product.stockCount} available</p>
+                  <ViewerCount slug={product.slug} />
+                </div>
               ) : (
-                <p className="text-sm text-success font-semibold">✓ In Stock — {product.stockCount} available</p>
+                <p className="text-sm text-destructive font-semibold">Out of Stock</p>
               )}
 
               <div className="flex flex-col sm:flex-row gap-3">

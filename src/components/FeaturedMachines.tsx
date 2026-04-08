@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Flame } from "lucide-react";
 import { getFeaturedProducts, formatPrice, type Product } from "@/data/products";
+import ViewerCount from "@/components/ViewerCount";
 
 const tabs = [
   { key: "all", label: "All" },
@@ -25,15 +26,22 @@ function MachineCard({ product, index }: { product: Product; index: number }) {
         className="group block bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1"
       >
         <div className="aspect-square bg-secondary overflow-hidden relative">
+          {!product.inStock ? (
+            <div className="absolute inset-0 bg-background/60 z-10 flex items-center justify-center">
+              <span className="text-sm font-bold text-destructive bg-destructive/10 border border-destructive/20 px-4 py-2 rounded-full">
+                Out of Stock
+              </span>
+            </div>
+          ) : null}
           <img
             src={product.images[0]}
             alt={product.title}
-            className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+            className={`w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500 ${!product.inStock ? "opacity-50 grayscale" : ""}`}
             loading="lazy"
           />
-          {product.stockCount <= 5 && (
-            <span className="absolute top-3 left-3 text-[10px] font-semibold bg-destructive text-destructive-foreground px-2.5 py-1 rounded-full">
-              Only {product.stockCount} left
+          {product.inStock && product.stockCount <= 5 && (
+            <span className="absolute top-3 left-3 text-[10px] font-semibold bg-destructive text-destructive-foreground px-2.5 py-1 rounded-full flex items-center gap-1">
+              <Flame className="w-3 h-3" /> Only {product.stockCount} left
             </span>
           )}
           {product.salePrice && (
@@ -42,7 +50,7 @@ function MachineCard({ product, index }: { product: Product; index: number }) {
             </span>
           )}
         </div>
-        <div className="p-5">
+        <div className="p-4 sm:p-5">
           <span className="text-[11px] font-medium text-primary">
             {product.category}
           </span>
@@ -62,8 +70,17 @@ function MachineCard({ product, index }: { product: Product; index: number }) {
           <p className="text-xs text-muted-foreground mt-1.5">
             Est. {formatPrice(product.estimatedMonthlyIncomeMin)}–{formatPrice(product.estimatedMonthlyIncomeMax)}/mo
           </p>
-          <div className="mt-4 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-secondary text-sm font-medium text-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-            View Machine <ArrowRight className="w-3.5 h-3.5" />
+          {product.inStock && (
+            <div className="mt-2">
+              <ViewerCount slug={product.slug} />
+            </div>
+          )}
+          <div className={`mt-3 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
+            product.inStock
+              ? "bg-secondary text-foreground group-hover:bg-primary group-hover:text-primary-foreground"
+              : "bg-muted text-muted-foreground cursor-not-allowed"
+          }`}>
+            {product.inStock ? <>View Machine <ArrowRight className="w-3.5 h-3.5" /></> : "Sold Out"}
           </div>
         </div>
       </Link>
