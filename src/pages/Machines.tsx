@@ -18,9 +18,14 @@ function MachineCard({ product, index }: { product: Product; index: number }) {
       <Link to={`/machines/${product.slug}`}
         className="group block bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
         <div className="aspect-square bg-secondary overflow-hidden relative">
-          <img src={product.images[0]} alt={product.title}
-            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-          {product.stockCount <= 5 && (
+          {!product.inStock && (
+            <div className="absolute inset-0 bg-background/60 z-10 flex items-center justify-center">
+              <span className="text-sm font-bold text-destructive bg-destructive/10 border border-destructive/20 px-4 py-2 rounded-full">Out of Stock</span>
+            </div>
+          )}
+          <img src={product.images[0]} alt={`${product.title} - Vending Machine for Sale`}
+            className={`w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500 ${!product.inStock ? "opacity-50 grayscale" : ""}`} loading="lazy" />
+          {product.inStock && product.stockCount <= 5 && (
             <span className="absolute top-3 left-3 text-[10px] font-semibold bg-destructive text-destructive-foreground px-2.5 py-1 rounded-full">
               Only {product.stockCount} left
             </span>
