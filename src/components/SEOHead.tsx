@@ -6,7 +6,7 @@ interface SEOHeadProps {
   keywords?: string;
   canonical?: string;
   ogImage?: string;
-  structuredData?: object;
+  structuredData?: object | object[];
 }
 
 export default function SEOHead({ title, description, keywords, canonical, ogImage, structuredData }: SEOHeadProps) {
@@ -46,19 +46,30 @@ export default function SEOHead({ title, description, keywords, canonical, ogIma
       link.href = canonical;
     }
 
-    // Structured data
+    // Structured data - support single or array
+    const sdCleanup: string[] = [];
     if (structuredData) {
-      let script = document.getElementById("structured-data") as HTMLScriptElement;
-      if (!script) {
-        script = document.createElement("script");
-        script.id = "structured-data";
-        script.type = "application/ld+json";
-        document.head.appendChild(script);
-      }
-      script.textContent = JSON.stringify(structuredData);
+      const items = Array.isArray(structuredData) ? structuredData : [structuredData];
+      items.forEach((sd, i) => {
+        const id = `structured-data-${i}`;
+        sdCleanup.push(id);
+        let script = document.getElementById(id) as HTMLScriptElement;
+        if (!script) {
+          script = document.createElement("script");
+          script.id = id;
+          script.type = "application/ld+json";
+          document.head.appendChild(script);
+        }
+        script.textContent = JSON.stringify(sd);
+      });
     }
 
     return () => {
+      sdCleanup.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+      });
+      // Clean legacy single id
       const sd = document.getElementById("structured-data");
       if (sd) sd.remove();
     };
