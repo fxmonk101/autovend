@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import ProductReviews from "@/components/ProductReviews";
 import ReviewForm from "@/components/ReviewForm";
 import ViewerCount from "@/components/ViewerCount";
+import ProductGallery from "@/components/ProductGallery";
 import SEOHead from "@/components/SEOHead";
 import { getProductBySlug, products, formatPrice } from "@/data/products";
 import { getReviewsForProduct, getAllReviews } from "@/data/reviews";
@@ -58,8 +59,11 @@ export default function MachineDetail() {
     "@type": "Product",
     name: product.title,
     description: product.excerpt,
-    image: product.images[0],
+    image: product.images,
+    sku: product.slug,
+    mpn: product.slug,
     brand: { "@type": "Brand", name: "AutoVend Solutions" },
+    category: "Vending Machine",
     offers: {
       "@type": "Offer",
       url: `https://autovend.lovable.app/machines/${product.slug}`,
@@ -67,12 +71,52 @@ export default function MachineDetail() {
       price: product.salePrice || product.price,
       availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       seller: { "@type": "Organization", name: "AutoVend Solutions" },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: { "@type": "MonetaryAmount", value: "0", currency: "USD" },
+        shippingDestination: { "@type": "DefinedRegion", addressCountry: "US" },
+        deliveryTime: { "@type": "ShippingDeliveryTime", handlingTime: { "@type": "QuantitativeValue", minValue: 5, maxValue: 10, unitCode: "DAY" } },
+      },
     },
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.8",
+      bestRating: "5",
+      worstRating: "1",
       reviewCount: displayReviews.length.toString(),
     },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://autovend.lovable.app/" },
+      { "@type": "ListItem", position: 2, name: "Vending Machines for Sale", item: "https://autovend.lovable.app/machines" },
+      { "@type": "ListItem", position: 3, name: product.title, item: `https://autovend.lovable.app/machines/${product.slug}` },
+    ],
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `How much does the ${product.title} cost?`,
+        acceptedAnswer: { "@type": "Answer", text: `The ${product.title} is priced at ${formatPrice(effectivePrice)}. You can start with a ${formatPrice(product.deposit)} refundable deposit and pay the balance after receiving video proof of your machine.` },
+      },
+      {
+        "@type": "Question",
+        name: `How much money can I make with the ${product.title}?`,
+        acceptedAnswer: { "@type": "Answer", text: `The estimated monthly income for the ${product.title} is ${formatPrice(product.estimatedMonthlyIncomeMin)} to ${formatPrice(product.estimatedMonthlyIncomeMax)}, with an ROI of approximately ${product.roiMonths} months depending on location and product selection.` },
+      },
+      {
+        "@type": "Question",
+        name: "Does AutoVend offer free shipping on vending machines?",
+        acceptedAnswer: { "@type": "Answer", text: "Yes, AutoVend Solutions offers free nationwide shipping on all vending machines. White-glove delivery is also available." },
+      },
+    ],
   };
 
   const handleReviewSubmit = (review: any) => {
