@@ -5,11 +5,10 @@ import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CreditCard, Building2, Globe, Bitcoin, Smartphone, ArrowRight, Shield, Lock, CheckCircle2 } from "lucide-react";
+import { Building2, Globe, Bitcoin, Smartphone, ArrowRight, Shield, Lock, CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const paymentMethods = [
-  { id: "card", label: "Credit / Debit Card", icon: CreditCard, desc: "Visa, Mastercard, Amex" },
   { id: "bank", label: "Bank Transfer", icon: Building2, desc: "ACH or domestic wire" },
   { id: "wire", label: "Wire Transfer", icon: Globe, desc: "International wire" },
   { id: "bitcoin", label: "Bitcoin", icon: Bitcoin, desc: "BTC payment" },
@@ -37,12 +36,12 @@ const bankDetails: Record<string, { instructions: string; details: string[] }> =
 
 export default function Checkout() {
   const { toast } = useToast();
-  const [method, setMethod] = useState("card");
+  const [method, setMethod] = useState("bank");
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "", phone: "",
     address: "", city: "", state: "", zip: "",
-    cardNumber: "", expiry: "", cvv: "", txRef: "",
+    txRef: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -61,16 +60,14 @@ export default function Checkout() {
               <CheckCircle2 className="w-20 h-20 text-success mx-auto mb-6" />
               <h1 className="font-display text-3xl font-bold text-foreground mb-3">Order Confirmed!</h1>
               <p className="text-muted-foreground mb-2">Thank you for your order. A confirmation has been sent to your email.</p>
-              {method !== "card" && (
-                <div className="bg-card border border-border rounded-2xl p-6 mt-6 text-left">
-                  <p className="text-sm font-semibold text-foreground mb-3">{bankDetails[method]?.instructions}</p>
-                  <ul className="space-y-1">
-                    {bankDetails[method]?.details.map((d, i) => (
-                      <li key={i} className="text-sm text-muted-foreground">{d}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <div className="bg-card border border-border rounded-2xl p-6 mt-6 text-left">
+                <p className="text-sm font-semibold text-foreground mb-3">{bankDetails[method]?.instructions}</p>
+                <ul className="space-y-1">
+                  {bankDetails[method]?.details.map((d, i) => (
+                    <li key={i} className="text-sm text-muted-foreground">{d}</li>
+                  ))}
+                </ul>
+              </div>
               <Link to="/machines">
                 <Button size="lg" className="mt-8 h-12 font-display font-semibold rounded-xl">
                   Continue Shopping <ArrowRight className="w-4 h-4 ml-2" />
@@ -156,26 +153,7 @@ export default function Checkout() {
                     ))}
                   </div>
 
-                  {method === "card" && (
-                    <div className="space-y-4">
-                      <div>
-                        <label className="text-sm font-medium text-foreground mb-1.5 block">Card Number</label>
-                        <Input placeholder="1234 5678 9012 3456" value={form.cardNumber} onChange={e => setForm({ ...form, cardNumber: e.target.value })} />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-sm font-medium text-foreground mb-1.5 block">Expiry</label>
-                          <Input placeholder="MM/YY" value={form.expiry} onChange={e => setForm({ ...form, expiry: e.target.value })} />
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-foreground mb-1.5 block">CVV</label>
-                          <Input placeholder="123" value={form.cvv} onChange={e => setForm({ ...form, cvv: e.target.value })} />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {method !== "card" && bankDetails[method] && (
+                  {bankDetails[method] && (
                     <div className="bg-secondary/50 rounded-xl p-5">
                       <p className="text-sm font-semibold text-foreground mb-3">{bankDetails[method].instructions}</p>
                       <ul className="space-y-1.5">
