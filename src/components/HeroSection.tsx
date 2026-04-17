@@ -3,16 +3,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Star, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import heroWarehouse from "@/assets/hero-warehouse-stock.jpg";
+import heroShowroom from "@/assets/hero-showroom.jpg";
+import heroDelivery from "@/assets/hero-delivery-fleet.jpg";
 import heroPokemon from "@/assets/hero-pokemon-vending.jpg";
-import heroSlide1 from "@/assets/hero-slide-1.jpg";
-import heroSlide2 from "@/assets/hero-slide-2.jpg";
-import heroSlide3 from "@/assets/hero-slide-3.jpg";
 
 const slides = [
-  { image: heroPokemon, alt: "Pokemon vending machine" },
-  { image: heroSlide1, alt: "Office vending machine" },
-  { image: heroSlide2, alt: "Entrepreneur with vending machines" },
-  { image: heroSlide3, alt: "Smart vending machine on campus" },
+  { image: heroWarehouse, alt: "Warehouse with rows of premium vending machines in stock for sale" },
+  { image: heroShowroom, alt: "Modern combo snack and drink vending machines in showroom" },
+  { image: heroDelivery, alt: "AutoVend delivery fleet shipping vending machines nationwide" },
+  { image: heroPokemon, alt: "Pokemon vending machine for sale" },
 ];
 
 const trustItems = [
