@@ -61,7 +61,7 @@ export default function MachineDetail() {
     image: product.images,
     sku: product.slug,
     mpn: product.slug,
-    brand: { "@type": "Brand", name: "AutoVend Solutions" },
+    brand: { "@type": "Brand", name: "Vending Machine Hub" },
     category: "Vending Machine",
     offers: {
       "@type": "Offer",
@@ -69,7 +69,7 @@ export default function MachineDetail() {
       priceCurrency: "USD",
       price: product.salePrice || product.price,
       availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      seller: { "@type": "Organization", name: "AutoVend Solutions" },
+      seller: { "@type": "Organization", name: "Vending Machine Hub" },
       shippingDetails: {
         "@type": "OfferShippingDetails",
         shippingRate: { "@type": "MonetaryAmount", value: "0", currency: "USD" },
@@ -103,7 +103,7 @@ export default function MachineDetail() {
       {
         "@type": "Question",
         name: `How much does the ${product.title} cost?`,
-        acceptedAnswer: { "@type": "Answer", text: `The ${product.title} is priced at ${formatPrice(effectivePrice)}. You can start with a ${formatPrice(product.deposit)} refundable deposit and pay the balance after receiving video proof of your machine.` },
+        acceptedAnswer: { "@type": "Answer", text: `The ${product.title} is priced at ${formatPrice(effectivePrice)}. You can start with a ${formatPrice(product.deposit)} refundable deposit and pay the balance once your machine completes our quality-assurance build process. You can also choose our $150/month payment plan.` },
       },
       {
         "@type": "Question",
@@ -112,8 +112,8 @@ export default function MachineDetail() {
       },
       {
         "@type": "Question",
-        name: "Does AutoVend offer free shipping on vending machines?",
-        acceptedAnswer: { "@type": "Answer", text: "Yes, AutoVend Solutions offers free nationwide shipping on all vending machines. White-glove delivery is also available." },
+        name: "Does VMH offer free shipping on vending machines?",
+        acceptedAnswer: { "@type": "Answer", text: "Yes, Vending Machine Hub offers free nationwide shipping on all vending machines. White-glove delivery is also available." },
       },
     ],
   };
@@ -137,7 +137,7 @@ export default function MachineDetail() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title={`${product.title} | Vending Machine for Sale — AutoVend`}
+        title={`${product.title} | Vending Machine for Sale — VMH`}
         description={`Buy ${product.title} for ${formatPrice(effectivePrice)}. ${product.excerpt.slice(0, 120)}. Free shipping, financing available. Start with $${product.deposit} deposit.`}
         keywords={`${product.title.toLowerCase()}, vending machine for sale, vending machine, ${product.category.toLowerCase()}, buy vending machine, pokemon vending machine`}
         canonical={`https://autovend.lovable.app/machines/${product.slug}`}
@@ -183,9 +183,15 @@ export default function MachineDetail() {
                     <span className="font-mono text-3xl font-bold text-foreground">{formatPrice(product.price)}</span>
                   )}
                 </div>
-                <div className="mt-4 p-4 bg-primary/5 border border-primary/15 rounded-xl">
-                  <p className="text-sm text-primary font-semibold">Or start with a {formatPrice(product.deposit)} deposit</p>
-                  <p className="text-xs text-muted-foreground mt-1">Balance due after video proof: {formatPrice(remainingBalance)}</p>
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-4 bg-primary/5 border border-primary/15 rounded-xl">
+                    <p className="text-sm text-primary font-bold">One-Time Payment</p>
+                    <p className="text-xs text-muted-foreground mt-1">Or start with a {formatPrice(product.deposit)} refundable deposit. Balance: {formatPrice(remainingBalance)}.</p>
+                  </div>
+                  <div className="p-4 bg-accent/5 border border-accent/20 rounded-xl">
+                    <p className="text-sm text-accent font-bold">$150 / month plan</p>
+                    <p className="text-xs text-muted-foreground mt-1">Lowest barrier to entry. Cancel anytime after 12 months.</p>
+                  </div>
                 </div>
               </div>
 
@@ -222,8 +228,8 @@ export default function MachineDetail() {
                 <Button size="lg" className="flex-1 h-12 font-display font-semibold rounded-xl" asChild>
                   <Link to="/checkout">Pay {formatPrice(product.deposit)} Deposit</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="flex-1 h-12 font-display font-semibold rounded-xl">
-                  Request Video Proof
+                <Button size="lg" variant="outline" className="flex-1 h-12 font-display font-semibold rounded-xl" asChild>
+                  <Link to="/checkout">Start $150/mo Plan</Link>
                 </Button>
               </div>
 
@@ -261,6 +267,22 @@ export default function MachineDetail() {
                   ))}
                   <div className="mt-6 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {product.description}
+                  </div>
+
+                  <div className="mt-8 p-5 bg-secondary/40 border border-border rounded-xl">
+                    <h3 className="font-display text-base font-bold text-foreground mb-2">Industry Resources & Further Reading</h3>
+                    <p className="text-xs text-muted-foreground mb-3">Trusted high-authority resources to help you operate, service, and grow your vending machine business:</p>
+                    <ul className="space-y-1.5 text-sm">
+                      <li>• <a href="https://www.namanow.org/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">National Automatic Merchandising Association (NAMA)</a> — vending industry standards & certification</li>
+                      <li>• <a href="https://www.vending.com/training-videos/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Vending.com Training Library</a> — operator training videos</li>
+                      <li>• <a href="https://www.vending.com/parts-service/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Vending.com Parts & Service</a> — replacement parts catalog</li>
+                      <li>• <a href="https://vendingworld.com/information/manuals/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">VendingWorld Manuals Archive</a> — service & operating PDFs</li>
+                      <li>• <a href="https://www.vendingtimes.com/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Vending Times</a> — industry news & analysis</li>
+                      <li>• <a href="https://www.sba.gov/business-guide/plan-your-business/market-research-competitive-analysis" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">SBA — Business Planning</a> — start your vending LLC</li>
+                      <li>• <a href="https://www.entrepreneur.com/starting-a-business" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Entrepreneur — Starting a Business</a> — go-to-market guides</li>
+                      <li>• <a href="https://www.forbes.com/small-business/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Forbes Small Business</a> — finance & growth strategy</li>
+                      <li>• <a href="https://www.bbb.org/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Better Business Bureau</a> — verify operator standing</li>
+                    </ul>
                   </div>
                 </div>
               )}
@@ -341,8 +363,8 @@ export default function MachineDetail() {
         <Button size="lg" className="flex-1 h-12 font-display font-semibold text-sm rounded-xl" asChild>
           <Link to="/checkout">Pay {formatPrice(product.deposit)} Deposit</Link>
         </Button>
-        <Button size="lg" variant="outline" className="flex-1 h-12 font-display font-semibold text-sm rounded-xl">
-          Video Proof
+        <Button size="lg" variant="outline" className="flex-1 h-12 font-display font-semibold text-sm rounded-xl" asChild>
+          <Link to="/checkout">$150/mo Plan</Link>
         </Button>
       </div>
 

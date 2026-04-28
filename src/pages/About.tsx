@@ -5,7 +5,7 @@ import { Shield, Users, Truck, Award, Target, Heart } from "lucide-react";
 import heroSlide2 from "@/assets/hero-slide-2.jpg";
 
 const values = [
-  { icon: Shield, title: "Trust & Transparency", desc: "Video proof before full payment. No hidden fees. What you see is what you get." },
+  { icon: Shield, title: "Trust & Transparency", desc: "Quality assurance on every machine. No hidden fees. Refundable deposits. What you see is what you get." },
   { icon: Users, title: "Community First", desc: "1,000+ entrepreneurs in our network. We grow together and support each other." },
   { icon: Truck, title: "Reliable Delivery", desc: "Nationwide shipping with tracking. White-glove delivery options available." },
   { icon: Award, title: "Quality Machines", desc: "We partner only with verified, commercial-grade machine manufacturers." },
@@ -32,21 +32,21 @@ export default function About() {
               Empowering Entrepreneurs<br />Through Vending
             </h1>
             <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-              AutoVend Solutions was founded with one mission: make passive income accessible to everyone through the vending machine business model.
+              Vending Machine Hub was founded with one mission: make passive income accessible to everyone through the vending machine business model.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <img src={heroSlide2} alt="AutoVend team" className="rounded-2xl w-full object-cover h-[400px]" />
+              <img src={heroSlide2} alt="VMH team" className="rounded-2xl w-full object-cover h-[400px]" />
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <h2 className="font-display text-3xl font-bold text-foreground mb-4">Our Story</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                We started as vending machine operators ourselves. We know the challenges, the questions, and the skepticism that comes with starting a vending business. That's why we built AutoVend differently.
+                We started as vending machine operators ourselves. We know the challenges, the questions, and the skepticism that comes with starting a vending business. That's why we built VMH differently.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Our video proof model was born from our own frustration with the industry. We wanted to create a buying experience where trust isn't optional — it's built into every step.
+                Our flexible payment model — pay in full or just $150 a month — was born from our own frustration with the high upfront cost of starting a vending business. We wanted to create a buying experience where the barrier to entry isn't your bank balance.
               </p>
               <p className="text-muted-foreground leading-relaxed">
                 Today, we've helped over 1,000 entrepreneurs start and grow their vending businesses. From first-time buyers to operators with 10+ machines, we serve everyone with the same commitment to quality and transparency.

@@ -14,6 +14,7 @@ import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Legal from "./pages/Legal";
+import ResourcePage from "./pages/ResourcePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,12 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/legal/:page" element={<Legal />} />
+          <Route path="/training-videos" element={<ResourcePage slug="training-videos" />} />
+          <Route path="/technical-support" element={<ResourcePage slug="technical-support" />} />
+          <Route path="/affiliates" element={<ResourcePage slug="affiliates" />} />
+          <Route path="/parts-service" element={<ResourcePage slug="parts-service" />} />
+          <Route path="/warranty-registration" element={<ResourcePage slug="warranty-registration" />} />
+          <Route path="/manuals" element={<ResourcePage slug="manuals" />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
