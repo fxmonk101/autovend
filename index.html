@@ -29,7 +29,22 @@
   </head>
 
   <body>
+    <style>
+      #vmh-splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:9999;transition:opacity .4s ease}
+      #vmh-splash.hide{opacity:0;pointer-events:none}
+      #vmh-splash img{width:96px;height:96px;animation:vmh-splash-spin 2.5s linear infinite}
+      @keyframes vmh-splash-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+    </style>
+    <div id="vmh-splash"><img src="/vmh-preloader.png" alt="Loading Vending Machine Hub" /></div>
     <div id="root"></div>
+    <script>
+      window.addEventListener('load', function(){
+        setTimeout(function(){
+          var s = document.getElementById('vmh-splash');
+          if (s){ s.classList.add('hide'); setTimeout(function(){ s.remove(); }, 500); }
+        }, 350);
+      });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
