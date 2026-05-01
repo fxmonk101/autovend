@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
-import { products, categories, formatPrice, type Product } from "@/data/products";
+import { products, categories, categoryDescriptions, formatPrice, type Product } from "@/data/products";
 
 function MachineCard({ product, index }: { product: Product; index: number }) {
   return (
@@ -60,17 +60,8 @@ export default function Machines() {
 
   const allCategories = [{ slug: "all", name: "All Machines", icon: "grid" }, ...categories];
 
-  let filtered = activeCategory === "all" ? products : products.filter((p) => {
-    const cat = p.category.toLowerCase();
-    if (activeCategory === "combo") return cat.includes("combo");
-    if (activeCategory === "drink") return (cat.includes("drink") || cat.includes("soda")) && !cat.includes("combo") && !cat.includes("cold food");
-    if (activeCategory === "snack") return cat.includes("snack");
-    if (activeCategory === "coffee") return cat.includes("coffee") || cat.includes("hot");
-    if (activeCategory === "frozen") return cat.includes("frozen") || cat.includes("cold food");
-    if (activeCategory === "specialized") return cat.includes("specialized");
-    if (activeCategory === "used") return cat.includes("used");
-    return false;
-  });
+  let filtered = activeCategory === "all" ? products : products.filter((p) => p.categorySlug === activeCategory);
+  const catInfo = categoryDescriptions[activeCategory];
 
   if (sortBy === "price-low") filtered = [...filtered].sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price));
   if (sortBy === "price-high") filtered = [...filtered].sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price));
