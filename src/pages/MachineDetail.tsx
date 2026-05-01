@@ -23,6 +23,13 @@ const trustBadges = [
 
 const tabs = ["Features", "Earnings", "Delivery", "Reviews"];
 
+function formatInline(s: string): string {
+  return s
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-foreground">$1</strong>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">$1</a>')
+    .replace(/\[([^\]]+)\]\((\/[^\)]+)\)/g, '<a href="$2" class="text-primary hover:underline">$1</a>');
+}
+
 export default function MachineDetail() {
   const { slug } = useParams();
   const product = getProductBySlug(slug || "");
