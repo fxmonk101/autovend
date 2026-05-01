@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
-import { products, categories, formatPrice, type Product } from "@/data/products";
+import { products, categories, categoryDescriptions, formatPrice, type Product } from "@/data/products";
 
 function MachineCard({ product, index }: { product: Product; index: number }) {
   return (
@@ -23,7 +23,7 @@ function MachineCard({ product, index }: { product: Product; index: number }) {
               <span className="text-sm font-bold text-destructive bg-destructive/10 border border-destructive/20 px-4 py-2 rounded-full">Out of Stock</span>
             </div>
           )}
-          <img src={product.images[0]} alt={`${product.title} - Vending Machine for Sale`}
+          <img src={product.images[0]} alt="vending machine for sale"
             className={`w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500 ${!product.inStock ? "opacity-50 grayscale" : ""}`} loading="lazy" />
           {product.inStock && product.stockCount <= 5 && (
             <span className="absolute top-3 left-3 text-[10px] font-semibold bg-destructive text-destructive-foreground px-2.5 py-1 rounded-full">
@@ -60,17 +60,8 @@ export default function Machines() {
 
   const allCategories = [{ slug: "all", name: "All Machines", icon: "grid" }, ...categories];
 
-  let filtered = activeCategory === "all" ? products : products.filter((p) => {
-    const cat = p.category.toLowerCase();
-    if (activeCategory === "combo") return cat.includes("combo");
-    if (activeCategory === "drink") return (cat.includes("drink") || cat.includes("soda")) && !cat.includes("combo") && !cat.includes("cold food");
-    if (activeCategory === "snack") return cat.includes("snack");
-    if (activeCategory === "coffee") return cat.includes("coffee") || cat.includes("hot");
-    if (activeCategory === "frozen") return cat.includes("frozen") || cat.includes("cold food");
-    if (activeCategory === "specialized") return cat.includes("specialized");
-    if (activeCategory === "used") return cat.includes("used");
-    return false;
-  });
+  let filtered = activeCategory === "all" ? products : products.filter((p) => p.categorySlug === activeCategory);
+  const catInfo = categoryDescriptions[activeCategory];
 
   if (sortBy === "price-low") filtered = [...filtered].sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price));
   if (sortBy === "price-high") filtered = [...filtered].sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price));
@@ -79,10 +70,10 @@ export default function Machines() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="Vending Machines for Sale | Browse All Machines — VMH"
-        description="Browse our full collection of vending machines for sale. Combo machines, snack machines, drink machines, Pokemon vending machines & more. Free shipping nationwide."
-        keywords="vending machine for sale, vending machine, pokemon vending machine, buy vending machine, combo vending machine, snack machine"
-        canonical="https://autovend.lovable.app/machines"
+        title={catInfo ? `${catInfo.title} | VMH` : "Vending Machines for Sale | Browse All Machines — VMH"}
+        description={catInfo?.description?.slice(0, 160) || "Browse our full collection of vending machines for sale. Combo, snack, drink, smart stores & more. Free shipping nationwide."}
+        keywords={catInfo?.keywords || "vending machine for sale, vending machine, pokemon vending machine, buy vending machine"}
+        canonical={`https://autovend.lovable.app/machines${activeCategory !== "all" ? `?cat=${activeCategory}` : ""}`}
       />
       <TopBar />
       <Navbar />
@@ -90,9 +81,11 @@ export default function Machines() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
             <span className="text-sm font-medium text-primary mb-2 block">Our Collection</span>
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground">Vending Machines for Sale</h1>
-            <p className="text-muted-foreground mt-3 max-w-lg mx-auto">
-              {filtered.length} machines available. All include nationwide delivery and lifetime support.
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground">
+              {catInfo?.title || "Vending Machines for Sale"}
+            </h1>
+            <p className="text-muted-foreground mt-4 max-w-3xl mx-auto leading-relaxed">
+              {catInfo?.description || `${filtered.length} vending machines for sale. All include free nationwide delivery, lifetime support, and our flexible $150/month payment plan.`}
             </p>
           </div>
 

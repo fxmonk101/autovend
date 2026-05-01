@@ -17,7 +17,7 @@ export default function ProductGallery({ images, title }: ProductGalleryProps) {
             <motion.img
               key={selected}
               src={images[selected]}
-              alt={`${title} - Vending Machine for Sale - Image ${selected + 1}`}
+              alt="vending machine for sale"
               className="max-w-full max-h-full object-contain"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -41,7 +41,7 @@ export default function ProductGallery({ images, title }: ProductGalleryProps) {
             >
               <img
                 src={img}
-                alt={`${title} thumbnail ${i + 1}`}
+                alt="vending machine for sale"
                 className="w-full h-full object-contain p-1"
                 loading="lazy"
               />
