@@ -23,7 +23,7 @@ function MachineCard({ product, index }: { product: Product; index: number }) {
               <span className="text-sm font-bold text-destructive bg-destructive/10 border border-destructive/20 px-4 py-2 rounded-full">Out of Stock</span>
             </div>
           )}
-          <img src={product.images[0]} alt={`${product.title} - Vending Machine for Sale`}
+          <img src={product.images[0]} alt="vending machine for sale"
             className={`w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500 ${!product.inStock ? "opacity-50 grayscale" : ""}`} loading="lazy" />
           {product.inStock && product.stockCount <= 5 && (
             <span className="absolute top-3 left-3 text-[10px] font-semibold bg-destructive text-destructive-foreground px-2.5 py-1 rounded-full">

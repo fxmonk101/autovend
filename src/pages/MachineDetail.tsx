@@ -345,7 +345,7 @@ export default function MachineDetail() {
                   <Link key={p.slug} to={`/machines/${p.slug}`}
                     className="group block bg-card rounded-2xl overflow-hidden border border-border hover:shadow-md transition-all">
                     <div className="aspect-square bg-secondary overflow-hidden">
-                      <img src={p.images[0]} alt={`${p.title} - Vending Machine for Sale`} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                      <img src={p.images[0]} alt="vending machine for sale" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     </div>
                     <div className="p-4">
                       <h3 className="font-display text-xs font-semibold text-foreground line-clamp-2">{p.title}</h3>
