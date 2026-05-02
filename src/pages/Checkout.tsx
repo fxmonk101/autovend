@@ -5,52 +5,28 @@ import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Building2, Globe, Bitcoin, Smartphone, ArrowRight, Shield, Lock, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Shield, Lock, CheckCircle2, Mail, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-const paymentMethods = [
-  { id: "bank", label: "Bank Transfer", icon: Building2, desc: "ACH or domestic wire" },
-  { id: "wire", label: "Wire Transfer", icon: Globe, desc: "International wire" },
-  { id: "bitcoin", label: "Bitcoin", icon: Bitcoin, desc: "BTC payment" },
-  { id: "zelle", label: "Zelle", icon: Smartphone, desc: "Instant transfer" },
-];
-
-const bankDetails: Record<string, { instructions: string; details: string[] }> = {
-  bank: {
-    instructions: "Send payment via ACH transfer to:",
-    details: ["Bank: Chase Bank", "Account Name: Vending Machine Hub LLC", "Routing: 021000021", "Account: XXXX-XXXX-4521", "Reference: Your order number"],
-  },
-  wire: {
-    instructions: "Send wire transfer to:",
-    details: ["Bank: Chase Bank, New York", "SWIFT: CHASUS33", "Account Name: Vending Machine Hub LLC", "Account: XXXX-XXXX-4521", "Reference: Your order number"],
-  },
-  bitcoin: {
-    instructions: "Send BTC to the following address:",
-    details: ["Wallet: bc1q...xk9f (full address shown after order)", "Network: Bitcoin mainnet only", "Confirmations required: 3", "Amount will be calculated at current rate"],
-  },
-  zelle: {
-    instructions: "Send Zelle payment to:",
-    details: ["Email: payments@vmh.com", "Name: Vending Machine Hub LLC", "Include your order number in memo"],
-  },
-};
 
 type PlanId = "onetime" | "monthly";
 
 export default function Checkout() {
   const { toast } = useToast();
-  const [method, setMethod] = useState("bank");
   const [plan, setPlan] = useState<PlanId>("onetime");
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "", phone: "",
     address: "", city: "", state: "", zip: "",
-    txRef: "",
+    notes: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    toast({ title: "Order Submitted!", description: plan === "monthly" ? "Your $150/month plan is set up. Confirmation email sent." : "You'll receive a confirmation email shortly." });
+    toast({
+      title: "Order Submitted!",
+      description: "Payment details will be communicated after order confirmation.",
+    });
   };
 
   if (submitted) {
@@ -61,14 +37,16 @@ export default function Checkout() {
           <div className="container mx-auto px-4 max-w-lg text-center">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
               <CheckCircle2 className="w-20 h-20 text-success mx-auto mb-6" />
-              <h1 className="font-display text-3xl font-bold text-foreground mb-3">Order Confirmed!</h1>
-              <p className="text-muted-foreground mb-2">Thank you for your order. A confirmation has been sent to your email.</p>
+              <h1 className="font-display text-3xl font-bold text-foreground mb-3">Order Received!</h1>
+              <p className="text-muted-foreground mb-2">
+                Thank you for your order. A VMH specialist will reach out shortly to confirm details and share secure payment instructions.
+              </p>
               <div className="bg-card border border-border rounded-2xl p-6 mt-6 text-left">
-                <p className="text-sm font-semibold text-foreground mb-3">{bankDetails[method]?.instructions}</p>
-                <ul className="space-y-1">
-                  {bankDetails[method]?.details.map((d, i) => (
-                    <li key={i} className="text-sm text-muted-foreground">{d}</li>
-                  ))}
+                <p className="text-sm font-semibold text-foreground mb-3">What happens next</p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex gap-2"><Mail className="w-4 h-4 text-primary mt-0.5 shrink-0" /> Confirmation email within 15 minutes.</li>
+                  <li className="flex gap-2"><Phone className="w-4 h-4 text-primary mt-0.5 shrink-0" /> A specialist calls to verify your order and location.</li>
+                  <li className="flex gap-2"><Lock className="w-4 h-4 text-primary mt-0.5 shrink-0" /> Secure payment instructions sent after confirmation.</li>
                 </ul>
               </div>
               <Link to="/machines">
@@ -162,38 +140,27 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                {/* Payment Method */}
+                {/* Payment Notice */}
                 <div className="bg-card border border-border rounded-2xl p-6">
-                  <h2 className="font-display text-lg font-bold text-foreground mb-4">Payment Method</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-                    {paymentMethods.map((pm) => (
-                      <button key={pm.id} type="button" onClick={() => setMethod(pm.id)}
-                        className={`p-4 rounded-xl border text-left transition-all ${
-                          method === pm.id
-                            ? "bg-primary/10 border-primary"
-                            : "bg-background border-border hover:border-primary/40"
-                        }`}>
-                        <pm.icon className={`w-5 h-5 mb-2 ${method === pm.id ? "text-primary" : "text-muted-foreground"}`} />
-                        <p className="text-sm font-semibold text-foreground">{pm.label}</p>
-                        <p className="text-xs text-muted-foreground">{pm.desc}</p>
-                      </button>
-                    ))}
+                  <h2 className="font-display text-lg font-bold text-foreground mb-2 flex items-center gap-2">
+                    <Lock className="w-5 h-5 text-primary" /> Payment Details
+                  </h2>
+                  <div className="bg-primary/5 border border-primary/20 rounded-xl p-5">
+                    <p className="text-sm text-foreground font-semibold mb-2">
+                      Payment details will be communicated after order confirmation.
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Once you place your order, a Vending Machine Hub specialist will contact you within 1 business hour to verify your details and securely share payment instructions for your selected plan.
+                    </p>
                   </div>
-
-                  {bankDetails[method] && (
-                    <div className="bg-secondary/50 rounded-xl p-5">
-                      <p className="text-sm font-semibold text-foreground mb-3">{bankDetails[method].instructions}</p>
-                      <ul className="space-y-1.5">
-                        {bankDetails[method].details.map((d, i) => (
-                          <li key={i} className="text-sm text-muted-foreground font-mono">{d}</li>
-                        ))}
-                      </ul>
-                      <div className="mt-4">
-                        <label className="text-sm font-medium text-foreground mb-1.5 block">Transaction Reference</label>
-                        <Input placeholder="Enter your transaction ID" value={form.txRef} onChange={e => setForm({ ...form, txRef: e.target.value })} />
-                      </div>
-                    </div>
-                  )}
+                  <div className="mt-4">
+                    <label className="text-sm font-medium text-foreground mb-1.5 block">Order Notes (optional)</label>
+                    <Input
+                      placeholder="Anything we should know about your order or location?"
+                      value={form.notes}
+                      onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
 
