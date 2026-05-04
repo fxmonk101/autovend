@@ -9,6 +9,7 @@ import ViewerCount from "@/components/ViewerCount";
 
 const tabs = [
   { key: "all", label: "All" },
+  { key: "ai-vending", label: "AI Vending" },
   { key: "combo", label: "Combo" },
   { key: "snack", label: "Snack" },
   { key: "drink", label: "Drink" },
