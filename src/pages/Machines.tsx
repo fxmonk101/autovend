@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
-import { products, categories, categoryDescriptions, formatPrice, type Product } from "@/data/products";
+import { useProducts, categories, categoryDescriptions, formatPrice, type Product } from "@/data/products";
 import { getReviewCountForProduct, getAverageRatingForProduct } from "@/data/reviews";
 import { useCart } from "@/hooks/useCart";
 
