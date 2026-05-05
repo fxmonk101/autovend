@@ -84,6 +84,7 @@ export default function Machines() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeCategory = searchParams.get("cat") || "all";
   const [sortBy, setSortBy] = useState("default");
+  const { products, loading } = useProducts();
 
   const allCategories = [{ slug: "all", name: "All Machines", icon: "grid" }, ...categories];
 
