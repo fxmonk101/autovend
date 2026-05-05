@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Flame, Star, ShoppingCart } from "lucide-react";
-import { getFeaturedProducts, formatPrice, type Product } from "@/data/products";
+import { useProducts, formatPrice, type Product } from "@/data/products";
 import { getReviewCountForProduct, getAverageRatingForProduct } from "@/data/reviews";
 import { useCart } from "@/hooks/useCart";
 import ViewerCount from "@/components/ViewerCount";
