@@ -140,13 +140,17 @@ export default function Machines() {
             </select>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
-            {filtered.map((product, i) => (
-              <MachineCard key={product.slug} product={product} index={i} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center py-20 text-muted-foreground">Loading machines…</div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
+              {filtered.map((product, i) => (
+                <MachineCard key={product.slug} product={product} index={i} />
+              ))}
+            </div>
+          )}
 
-          {filtered.length === 0 && (
+          {!loading && filtered.length === 0 && (
             <div className="text-center py-20">
               <p className="text-muted-foreground">No machines found in this category.</p>
             </div>
