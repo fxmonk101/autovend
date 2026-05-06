@@ -126,11 +126,12 @@ export async function generateInvoicePDF(data: InvoiceData): Promise<jsPDF> {
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...TEXT);
   doc.setFontSize(9);
+  const paymentLabel = data.paymentMethod ? PAYMENT_LABELS[data.paymentMethod] : null;
   const statusLines = [
     `Plan: ${data.plan === "monthly" ? "$150 / month subscription" : "One-Time Payment"}`,
+    paymentLabel ? `Payment Method: ${paymentLabel}` : "",
     "Payment instructions will be",
-    "communicated by email/phone",
-    "within 1 business hour.",
+    "shared after confirmation.",
     c.preferredContact ? `Contact via: ${c.preferredContact}` : "",
     c.preferredTime ? `Best time: ${c.preferredTime}` : "",
   ].filter(Boolean);
