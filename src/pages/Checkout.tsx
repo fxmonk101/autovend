@@ -65,18 +65,8 @@ export default function Checkout() {
     const total = plan === "monthly" ? MONTHLY_PRICE : subtotal;
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const supabaseUrl = (supabase as any).supabaseUrl || import.meta.env.VITE_SUPABASE_URL;
-      const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-      const res = await fetch(`${supabaseUrl}/functions/v1/create-order`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": anonKey,
-          "Authorization": `Bearer ${session?.access_token ?? anonKey}`,
-        },
-        body: JSON.stringify({
+      const { data: result, error: fnError } = await supabase.functions.invoke("create-order", {
+        body: {
           order: {
             order_number: orderNo, status: "pending", plan, payment_method: paymentMethod,
             subtotal, total,
@@ -88,11 +78,11 @@ export default function Checkout() {
           items: items.map(it => ({
             product_slug: it.slug, title: it.title, price: it.price, quantity: it.quantity, image_url: it.image,
           })),
-        }),
+        },
       });
 
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "Failed to save order");
+      if (fnError) throw new Error(fnError.message || "Failed to save order");
+      if (result?.error) throw new Error(result.error);
       toast({ title: "Order received!", description: "Download your invoice on the next page. We'll contact you shortly." });
       setSubmitted(true);
       clear();
