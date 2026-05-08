@@ -65,20 +65,34 @@ export default function Checkout() {
     const total = plan === "monthly" ? MONTHLY_PRICE : subtotal;
 
     try {
-      const { data: orderRow, error: orderErr } = await supabase.from("orders").insert({
-        order_number: orderNo, status: "pending", plan, payment_method: paymentMethod,
-        subtotal, total,
-        first_name: form.firstName, last_name: form.lastName, email: form.email, phone: form.phone,
-        alt_phone: form.altPhone || null, company: form.company || null, business_type: form.businessType || null,
-        address: form.address, city: form.city, state: form.state, zip: form.zip,
-        preferred_contact: form.preferredContact, preferred_time: form.preferredTime, notes: form.notes || null,
-      }).select("id").single();
-      if (orderErr) throw orderErr;
-      if (orderRow) {
-        await supabase.from("order_items").insert(items.map(it => ({
-          order_id: orderRow.id, product_slug: it.slug, title: it.title, price: it.price, quantity: it.quantity, image_url: it.image,
-        })));
-      }
+      const { data: { session } } = await supabase.auth.getSession();
+      const supabaseUrl = (supabase as any).supabaseUrl || import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const res = await fetch(`${supabaseUrl}/functions/v1/create-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": anonKey,
+          "Authorization": `Bearer ${session?.access_token ?? anonKey}`,
+        },
+        body: JSON.stringify({
+          order: {
+            order_number: orderNo, status: "pending", plan, payment_method: paymentMethod,
+            subtotal, total,
+            first_name: form.firstName, last_name: form.lastName, email: form.email, phone: form.phone,
+            alt_phone: form.altPhone || null, company: form.company || null, business_type: form.businessType || null,
+            address: form.address, city: form.city, state: form.state, zip: form.zip,
+            preferred_contact: form.preferredContact, preferred_time: form.preferredTime, notes: form.notes || null,
+          },
+          items: items.map(it => ({
+            product_slug: it.slug, title: it.title, price: it.price, quantity: it.quantity, image_url: it.image,
+          })),
+        }),
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "Failed to save order");
       toast({ title: "Order received!", description: "Download your invoice on the next page. We'll contact you shortly." });
       setSubmitted(true);
       clear();
